@@ -1,0 +1,64 @@
+=============================================
+  台灣活動資訊 LINE Bot - 安裝與啟動說明
+=============================================
+
+【系統需求】
+- Python 3.9 以上
+- 一個公開的 HTTPS 網址 (用於 LINE Webhook)
+  建議使用 ngrok 測試，或部署到 Render / Railway / VPS
+
+【安裝步驟】
+
+1. 安裝套件
+   cd event_bot
+   pip install -r requirements.txt
+
+2. 設定環境變數
+   複製 .env.example 為 .env，並填入以下內容：
+
+   LINE_CHANNEL_SECRET     → LINE Developers 後台的 Channel Secret
+   LINE_CHANNEL_ACCESS_TOKEN → LINE Developers 後台的 Channel Access Token
+   PUSH_TARGETS            → 你的 LINE User ID (U 開頭)
+   PUSH_TIME               → 推播時間，例如 08:00
+   DAYS_AHEAD              → 要查詢未來幾天的活動 (預設 7)
+
+3. 取得你的 LINE User ID
+   可在 LINE Developers Console → Messaging API → 掃描 QRCode 加入好友後
+   在 Webhook 收到的事件中查看 source.userId
+
+4. 啟動程式
+   python app.py
+
+5. 設定 LINE Webhook URL
+   在 LINE Developers Console → Messaging API → Webhook URL
+   填入：https://你的網域/callback
+
+【Bot 指令】
+  北部 → 查詢北部活動
+  中部 → 查詢中部活動
+  南部 → 查詢南部活動
+  東部 → 查詢東部活動
+  推播 → 立即推送所有活動
+  更新 → 手動更新活動資料
+  說明 → 顯示指令說明
+
+【自動排程】
+  每週四 06:00 → 自動收集最新活動資料
+  每週五 08:00 → 自動推播本週活動 (可修改 PUSH_TIME)
+
+【資料來源】
+  - 文化部全國藝文活動資料庫
+  - Accupass 活動網站
+  - PTT 藝文/戲劇/音樂板 (公開資料，自動抓取)
+  - Facebook 活動 (需設定 FB_ACCESS_TOKEN，選填)
+  - Dcard 才藝/音樂/生活等看板
+
+【Facebook Token 取得方式】
+  1. 前往 https://developers.facebook.com
+  2. 建立應用程式 → 選「消費者」類型
+  3. 加入「Graph API」產品
+  4. Graph API Explorer → 選你的 App → 取得 Token
+  5. 填入 .env 的 FB_ACCESS_TOKEN
+  (不填此項則自動跳過 Facebook，其他來源照常運作)
+
+=============================================

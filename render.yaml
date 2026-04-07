@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: taiwan-events-app
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --threads 2 --timeout 120
+    envVars:
+      - key: DAYS_AHEAD
+        value: "14"
+      - key: PUSH_TIME
+        value: "08:00"
+      - key: PORT
+        value: "10000"

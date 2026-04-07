@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="活動資訊">
+  <meta name="theme-color" content="#2C3E50">
+  <link rel="apple-touch-icon" href="/static/icon-192.png">
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="stylesheet" href="/static/style.css">
+  <title>台灣活動資訊</title>
+</head>
+<body>
+
+  <!-- 頂部標題列 -->
+  <header class="top-bar">
+    <h1>台灣活動資訊</h1>
+    <button id="refresh-btn" class="refresh-btn" onclick="loadEvents()">&#8635;</button>
+  </header>
+
+  <!-- 地區篩選 -->
+  <nav class="region-tabs">
+    <button class="tab active" data-region="">全部</button>
+    <button class="tab" data-region="北部">北部</button>
+    <button class="tab" data-region="中部">中部</button>
+    <button class="tab" data-region="南部">南部</button>
+    <button class="tab" data-region="東部">東部</button>
+  </nav>
+
+  <!-- 主要內容 -->
+  <main id="main-content">
+    <div id="loading" class="loading-wrap">
+      <div class="spinner"></div>
+      <p>載入活動中...</p>
+    </div>
+    <div id="event-list" style="display:none">
+      <!-- 進行中 -->
+      <section id="ongoing-section">
+        <div class="section-header ongoing-header">
+          <span class="dot green"></span> 進行中
+          <span id="ongoing-count" class="count-badge">0</span>
+        </div>
+        <div id="ongoing-cards" class="cards-wrap"></div>
+      </section>
+      <!-- 即將開始 -->
+      <section id="upcoming-section">
+        <div class="section-header upcoming-header">
+          <span class="dot blue"></span> 即將開始
+          <span id="upcoming-count" class="count-badge">0</span>
+        </div>
+        <div id="upcoming-cards" class="cards-wrap"></div>
+      </section>
+    </div>
+    <div id="empty-state" class="empty-state" style="display:none">
+      <p>😴 目前沒有活動資料</p>
+      <button class="update-btn" onclick="triggerUpdate()">立即更新資料</button>
+    </div>
+  </main>
+
+  <!-- 底部更新按鈕 -->
+  <footer class="bottom-bar">
+    <button class="update-btn full" onclick="triggerUpdate()" id="update-btn">
+      🔄 更新最新活動
+    </button>
+  </footer>
+
+  <!-- Toast 通知 -->
+  <div id="toast" class="toast"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
