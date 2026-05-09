@@ -21,7 +21,7 @@ from config import CULTURE_CATEGORIES, DAYS_AHEAD, REGIONS
 
 logger = logging.getLogger(__name__)
 
-CULTURE_API = "https://opendata.culture.tw/frontsite/trans/SearchShowAction.do"
+CULTURE_API = "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do"
 
 
 def _get_region(city: str) -> str:
