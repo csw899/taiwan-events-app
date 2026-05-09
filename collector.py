@@ -35,6 +35,18 @@ def _make_id(source: str, title: str, start_date: str) -> str:
 
 # ─── 文化部 API ─────────────────────────────────────────────
 
+CULTURE_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/json, text/javascript, */*; q=0.01",
+    "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Referer": "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do",
+}
+
+
 def fetch_culture_events() -> list:
     events = []
     today = datetime.today()
@@ -45,10 +57,12 @@ def fetch_culture_events() -> list:
             resp = requests.get(
                 CULTURE_API,
                 params={"method": "doFindTypeJ", "category": cat_id},
-                timeout=15,
+                headers=CULTURE_HEADERS,
+                timeout=30,
             )
             resp.raise_for_status()
             data = resp.json()
+            logger.info(f"文化部分類 {cat_name}: 取得 {len(data)} 筆原始資料")
         except Exception as e:
             logger.warning(f"文化部 API 分類 {cat_name} 失敗: {e}")
             continue

@@ -17,7 +17,7 @@ PUSH_TARGETS = os.getenv("PUSH_TARGETS", "").split(",")
 DB_PATH = os.getenv("DB_PATH", "events.db")
 
 # 活動預告天數 (收集未來幾天內的活動)
-DAYS_AHEAD = int(os.getenv("DAYS_AHEAD", "7"))
+DAYS_AHEAD = int(os.getenv("DAYS_AHEAD", "90"))
 
 # 台灣縣市分區
 REGIONS = {
