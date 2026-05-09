@@ -16,7 +16,7 @@ from config import CULTURE_CATEGORIES, DAYS_AHEAD, REGIONS
 
 logger = logging.getLogger(__name__)
 
-CULTURE_API = "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do"
+CULTURE_API = "https://opendata.culture.tw/frontsite/trans/SearchShowAction.do"
 
 
 def _get_region(city: str) -> str:
@@ -64,7 +64,7 @@ def fetch_culture_events() -> list:
             data = resp.json()
             logger.info(f"文化部分類 {cat_name}: 取得 {len(data)} 筆原始資料")
         except Exception as e:
-            logger.warning(f"文化部 API 分類 {cat_name} 失敗: {e}")
+            logger.warning(f"文化部 API 分類 {cat_name} 失敗: {type(e).__name__}: {e}")
             continue
 
         for item in data:
