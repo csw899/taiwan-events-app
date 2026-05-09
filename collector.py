@@ -7,10 +7,15 @@ import hashlib
 import logging
 import re
 import time
+import warnings
 from datetime import datetime, timedelta
 
 import requests
+import urllib3
 from bs4 import BeautifulSoup
+
+# 台灣政府網站 SSL 憑證有 Missing Subject Key Identifier 問題，關閉驗證
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from config import CULTURE_CATEGORIES, DAYS_AHEAD, REGIONS
 
@@ -59,6 +64,7 @@ def fetch_culture_events() -> list:
                 params={"method": "doFindTypeJ", "category": cat_id},
                 headers=CULTURE_HEADERS,
                 timeout=30,
+                verify=False,
             )
             resp.raise_for_status()
             data = resp.json()
