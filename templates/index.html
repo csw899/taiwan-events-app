@@ -22,11 +22,12 @@
 
   <!-- 地區篩選 -->
   <nav class="region-tabs">
-    <button class="tab active" data-region="">全部</button>
-    <button class="tab" data-region="北部">北部</button>
-    <button class="tab" data-region="中部">中部</button>
-    <button class="tab" data-region="南部">南部</button>
-    <button class="tab" data-region="東部">東部</button>
+    <button class="tab" data-mode="recommend" data-region="" onclick="switchMode('recommend')">⭐ 推薦</button>
+    <button class="tab active" data-mode="all" data-region="" onclick="switchMode('all')">全部</button>
+    <button class="tab" data-mode="all" data-region="北部" onclick="switchMode('all')">北部</button>
+    <button class="tab" data-mode="all" data-region="中部" onclick="switchMode('all')">中部</button>
+    <button class="tab" data-mode="all" data-region="南部" onclick="switchMode('all')">南部</button>
+    <button class="tab" data-mode="all" data-region="東部" onclick="switchMode('all')">東部</button>
   </nav>
 
   <!-- 主要內容 -->
@@ -35,6 +36,14 @@
       <div class="spinner"></div>
       <p>載入活動中...</p>
     </div>
+
+    <!-- 推薦區塊 -->
+    <div id="recommend-list" style="display:none">
+      <div class="recommend-intro">✨ 精選北中南東各地 10 大活動</div>
+      <div id="recommend-cards"></div>
+    </div>
+
+    <!-- 一般活動列表 -->
     <div id="event-list" style="display:none">
       <!-- 進行中 -->
       <section id="ongoing-section">

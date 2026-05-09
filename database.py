@@ -142,6 +142,60 @@ def get_events_by_status(today: str, end: str, region: str = None) -> dict:
     }
 
 
+def get_recommended_events(today: str, end: str, top_n: int = 10) -> dict:
+    """
+    每個地區回傳推薦 top_n 筆活動
+    評分：進行中+3、有描述+2、有網址+1、有地點+1
+    類別多樣化：同類別最多選 3 筆
+    """
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT title, category, start_date, end_date, location, city, url, region, description
+        FROM events
+        WHERE start_date <= ?
+          AND (end_date >= ? OR end_date IS NULL)
+          AND region IN ('北部', '中部', '南部', '東部')
+    """, (end, today))
+    rows = cur.fetchall()
+    conn.close()
+
+    def _score(row):
+        title, category, start, end_date, location, city, url, region, desc = row
+        s = 0
+        if start <= today <= (end_date or today):
+            s += 3                                           # 進行中優先
+        if desc and len(desc) > 20:
+            s += 2                                           # 有詳細描述
+        if url and url.startswith('http') and 'cloud.culture.tw' not in url:
+            s += 1                                           # 有專屬連結
+        if location and len(location.strip()) > 2:
+            s += 1                                           # 有明確地點
+        return s
+
+    # 依地區分組並評分
+    by_region = {}
+    for row in rows:
+        r = row[7]
+        by_region.setdefault(r, []).append((_score(row), row))
+
+    result = {}
+    for region, scored in by_region.items():
+        scored.sort(key=lambda x: -x[0])
+        picked, cat_count = [], {}
+        for s, row in scored:
+            cat = row[1] or '其他'
+            if cat_count.get(cat, 0) >= 3:
+                continue
+            cat_count[cat] = cat_count.get(cat, 0) + 1
+            picked.append(list(row[:7]))                     # title~url
+            if len(picked) >= top_n:
+                break
+        result[region] = picked
+
+    return result
+
+
 def upsert_subscriber(user_id: str, region: str):
     conn = get_conn()
     cur = conn.cursor()

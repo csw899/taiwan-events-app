@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from flask import Flask, abort, jsonify, render_template, request
 
 from config import DAYS_AHEAD, LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET
-from database import get_events_by_status, init_db, upsert_subscriber
+from database import get_events_by_status, get_recommended_events, init_db, upsert_subscriber
 from scheduler import collect_and_store, start_scheduler
 
 logging.basicConfig(
@@ -50,6 +50,21 @@ def api_events():
     return jsonify({
         "ongoing":  to_list(data["ongoing"]),
         "upcoming": to_list(data["upcoming"]),
+        "updated_at": today.strftime("%Y-%m-%d %H:%M"),
+    })
+
+
+# ── API：最佳推薦 ─────────────────────────────────────────
+
+@app.route("/api/recommend")
+def api_recommend():
+    today = datetime.today()
+    end   = today + timedelta(days=DAYS_AHEAD)
+    today_str = today.strftime("%Y-%m-%d")
+    end_str   = end.strftime("%Y-%m-%d")
+    data = get_recommended_events(today_str, end_str, top_n=10)
+    return jsonify({
+        "recommend": data,
         "updated_at": today.strftime("%Y-%m-%d %H:%M"),
     })
 

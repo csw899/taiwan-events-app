@@ -205,6 +205,31 @@ main { padding: 16px 16px 8px; }
 .update-btn.full { width: 100%; }
 .update-btn:disabled { background: #aaa; }
 
+/* ── 推薦區塊 ── */
+.recommend-intro {
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+  padding: 12px 0 4px;
+}
+.rec-region-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 20px 0 10px;
+  color: #2C3E50;
+}
+.event-card.recommend {
+  border-left-color: #F39C12;
+  background: linear-gradient(135deg, #fff 90%, #FEF9EC);
+}
+.recommend .card-tag {
+  background: #FEF3CD;
+  color: #D68910;
+}
+
 /* ── Toast ── */
 .toast {
   position: fixed;
